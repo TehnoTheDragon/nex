@@ -1,7 +1,7 @@
 # Nex
 Lua module for creating classes and work with them
 
-# Examples
+# Example
 ```lua
 local class = require('nex')
 
@@ -19,3 +19,5 @@ end
 local mySquare = Square(50, 10)
 print(mySquare:area())
 ```
+
+Wiki: [Learn More](https://github.com/TehnoTheDragon/nex/wiki/Nex-Guide)

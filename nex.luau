@@ -20,7 +20,8 @@ local _OPERATORS = {
 	{"len", "__len"},
 	{"call", "__call"},
 	{"mode", "__mode"},
-	{"tostring", "__tostring"},
+
+	{"init", "__init"},
 }
 
 --# Private Methods
@@ -53,7 +54,7 @@ local function copyTo(from: {}, to: {}, respectTo: boolean)
 	end
 end
 
-local function mfield(content: {}, field: string)
+local function mfield(content: any, field: string)
 	return getmetatable(content)[field]
 end
 
@@ -105,12 +106,12 @@ local function create_op(operator: {}, class: {}, op: string, metamethod: string
 end
 
 --# Tools
-local function _cast_class(object: {}, class: {})
+local function _cast_class(object: {}, class)
 	local instance = class()
 	copyTo(object, instance, false)
 	instance.cast = function(self, class: {})
 		if self == nil or class == nil then
-			copyTo(instance, object, false)
+			return copyTo(instance, object, false)
 		else
 			return instance:cast(class)
 		end
@@ -119,7 +120,7 @@ local function _cast_class(object: {}, class: {})
 end
 
 --# Object
-local function _create_object_metatable(object: {}, class: {})
+local function _create_object_metatable(object: {}, class)
 	local objectMetatable = {}
 	objectMetatable.__name = mfield(class, "__name")
 	
@@ -150,6 +151,7 @@ end
 local function _create_object(class: {}, ...)
 	local object = setmetatable({}, _create_object_metatable({}, class))
 	cif(class, "init", object, ...)
+	cif(getopcontainer(class, "__init"), toargn(...), object, ...)
 	
 	object.destroy = rif(CREATE_DESTROY_METHOD, function()
 		cif(class, "deinit", object)

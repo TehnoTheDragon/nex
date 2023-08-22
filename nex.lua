@@ -20,7 +20,8 @@ local _OPERATORS = {
 	{"len", "__len"},
 	{"call", "__call"},
 	{"mode", "__mode"},
-	{"tostring", "__tostring"},
+
+	{"init", "__init"},
 }
 
 --# Private Methods
@@ -110,7 +111,7 @@ local function _cast_class(object, class)
 	copyTo(object, instance, false)
 	instance.cast = function(self, class)
 		if self == nil or class == nil then
-			copyTo(instance, object, false)
+			return copyTo(instance, object, false)
 		else
 			return instance:cast(class)
 		end
@@ -150,6 +151,7 @@ end
 local function _create_object(class, ...)
 	local object = setmetatable({}, _create_object_metatable({}, class))
 	cif(class, "init", object, ...)
+	cif(getopcontainer(class, "__init"), toargn(...), object, ...)
 	
 	object.destroy = rif(CREATE_DESTROY_METHOD, function()
 		cif(class, "deinit", object)

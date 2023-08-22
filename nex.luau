@@ -10,6 +10,13 @@ local _OPERATORS = {
 	{"mod", "__mod"},
 	{"pow", "__pow"},
 	{"neg", "__unm"},
+
+	{"AND", "__band"},
+	{"OR", "__bor"},
+	{"XOR", "__bxor"},
+	{"NOT", "__bnot"},
+	{"LS", "__shl"},
+	{"RS", "__shr"},
 	
 	{"equal", "__eq"},
 	{"lessThan", "__lt"},
@@ -145,6 +152,12 @@ local function _create_object_metatable(object: {}, class)
 	metamethod("__lt", class.__lt)
 	metamethod("__le", class.__le)
 	metamethod("__gc", class.__gc)
+	metamethod("__band", class.__band)
+	metamethod("__bor", class.__bor)
+	metamethod("__bxor", class.__bxor)
+	metamethod("__bnot", class.__bnot)
+	metamethod("__shl", class.__shl)
+	metamethod("__shr", class.__shr)
 	return objectMetatable
 end
 

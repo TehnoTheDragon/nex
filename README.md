@@ -1,4 +1,4 @@
-# Nex
+# ![Nex]("nex-icon.svg")
 Lua module for creating classes and work with them
 
 # Example

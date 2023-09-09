@@ -1,4 +1,4 @@
-# <img src="nex-icon.svg" width="48"> Nex
+# Nex
 Lua module for creating classes and work with them
 
 # Example

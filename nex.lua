@@ -40,10 +40,7 @@ end
 
 local function cif(content, name, ...)
 	local fn = content[name]
-	if fn then
-		return fn(...)
-	end
-	return nil
+	return fn and fn(...)
 end
 
 local function rif(flag, value)
@@ -75,8 +72,8 @@ end
 
 local function toargn(...)
 	local argv = {}
-	for i,v in {...} do
-		local t = typeof(v)
+	for i,v in pairs({...}) do
+		local t = type(v)
 		if t == "table" then
 			local classname = mfield(v, "__name")
 			table.insert(argv, classname ~= "table" and classname or t)
@@ -186,7 +183,7 @@ end
 --# Operator
 local function _create_operator(class)
 	local operator = {}
-	for _, op in _OPERATORS do
+	for _, op in ipairs(_OPERATORS) do
 		create_op(operator, class, op[1], op[2])
 	end
 	return setmetatable({}, {__index = operator})
@@ -229,7 +226,7 @@ local function _create_class(name)
 		
 		local class = {}
 		
-		for i,v in inheritances do
+		for i,v in pairs(inheritances) do
 			copyTo(v, class, true)
 			inheritancesCache[mfield(v, "__tostring")()] = v
 		end

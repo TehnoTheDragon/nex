@@ -1,4 +1,3 @@
-![Nex Icon]("nex-icon.svg")
 # Nex
 Lua module for creating classes and work with them
 
@@ -22,3 +21,6 @@ print(mySquare:area())
 ```
 
 Wiki: [Learn More](https://github.com/TehnoTheDragon/nex/wiki/Nex-Guide)
+
+
+###### nex.lua have few bugs due to it was generated from nex.luau.

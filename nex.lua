@@ -59,7 +59,8 @@ local function copyTo(from, to, respectTo)
 end
 
 local function mfield(content, field)
-	return getmetatable(content)[field]
+	local metatable = getmetatable(content)
+	return metatable and metatable[field]
 end
 
 local function mmwrapper(t)

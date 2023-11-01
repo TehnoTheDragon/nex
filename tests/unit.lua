@@ -31,11 +31,11 @@ function unit.new(label)
             self.messages = {}
             
             for _, task in ipairs(self.tests) do
-                local result = task.task(unpack(task.args))
-                local testResult = task.test(result)
+                local result = {task.task(unpack(task.args))}
+                local testResult, testMessage = task.test(unpack(result))
 
                 local resultMessage = testResult and "Successful" or "Failed"
-                table.insert(self.messages, ("[%s][%s]"):format(task.label, resultMessage))
+                table.insert(self.messages, ("[%s][%s]: '%s'"):format(task.label, resultMessage, tostring(result[2])))
             end
 
             return tostring(self)
@@ -44,7 +44,7 @@ function unit.new(label)
 end
 
 function unit:__test(label, run, test, ...)
-    table.insert(self.tests, { label=label, task=run, test=test, args={...} })
+    table.insert(self.tests, { label=label, task=make_lazy_pcall(run), test=test, args={...} })
 end
 
 function unit:messages()
@@ -52,20 +52,20 @@ function unit:messages()
 end
 
 function unit:nofine(label, fn, ...)
-    self:__test(label, make_lazy_pcall(fn), function(result, x)
+    self:__test(label, fn, function(result, x)
         return result == false
     end, ...)
 end
 
 function unit:fine(label, fn, ...)
-    self:__test(label, make_lazy_pcall(fn), function(result)
+    self:__test(label, fn, function(result)
         return result == true
     end, ...)
 end
 
 function unit:equal(label, fn, expect, ...)
-    self:__test(label, fn, function(result)
-        return result == expect
+    self:__test(label, fn, function(result, value)
+        return value == expect
     end, ...)
 end
 
